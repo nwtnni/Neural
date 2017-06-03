@@ -24,11 +24,11 @@ def extract(filename):
 
 if __name__ == "__main__":
 
-    network = NeuralNetwork([784, 100, 10], 0.3)
+    network = NeuralNetwork([784, 500, 250, 100, 10], 0.01)
 
     (examples, targets) = extract("./Large/mnist_train.csv")
 
-    network.train(examples, targets, 1)
+    network.train(examples, targets, 5)
 
     (examples, targets) = extract("./Large/mnist_test.csv")
 
