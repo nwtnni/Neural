@@ -4,7 +4,7 @@
 
 This is an implementation of a general neural network using a logistic activating function,
 and back-propagation with stochastic gradient descent. It handles arbitrary numbers of
-layers and nodes per layer, but inputs and outputs should be in the range \[0, 1\).
+layers and nodes per layer, but inputs and outputs should be in the range \(0, 1\).
 
 Training and testing were done on the well-known 
 [MNIST dataset of handwritten digits](yann.lecun.com/exdb/mnist/)
