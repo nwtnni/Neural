@@ -1,6 +1,7 @@
 from NeuralNetwork import NeuralNetwork
 import numpy as np
 from numpy.random import rand
+import matplotlib.pyplot as plt
 
 def extract(filename):
 
@@ -41,3 +42,26 @@ if __name__ == "__main__":
             correct += 1
 
     print "Success rate: ", correct / float(len(targets))
+
+    f, axes = plt.subplots(3, 4)
+    counter = 0
+
+    for r in range (0, 3):
+        for c in range(0, 4):
+
+            axes[r, c].axis('off')
+
+            if (counter < 10):
+
+                output = np.zeros(10) + 0.01
+                output[counter] = 0.99
+                output = output[:, None]
+
+                img = network.backQuery(output).reshape(28, 28)
+                
+                axes[r, c].set_title(counter)
+                axes[r, c].imshow(img, cmap='binary', interpolation='nearest')
+
+                counter += 1
+
+    plt.show()
