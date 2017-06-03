@@ -25,13 +25,19 @@ if __name__ == "__main__":
 
     network = NeuralNetwork([784, 100, 10], 0.3)
 
-    (examples, targets) = extract("./Small/mnist_train_100.csv")
+    (examples, targets) = extract("./Large/mnist_train.csv")
 
     network.train(examples, targets, 1)
 
-    (examples, targets) = extract("./Small/mnist_test_10.csv")
+    (examples, targets) = extract("./Large/mnist_test.csv")
+
+    correct = 0
 
     for i in range(len(targets)):
 
         result = np.argmax(network.query(examples[i]))
-        print "Expected ", np.argmax(targets[i]), ", got ", result
+
+        if result == np.argmax(targets[i]): 
+            correct += 1
+
+    print "Success rate: ", correct / float(len(targets))

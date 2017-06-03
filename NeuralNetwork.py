@@ -2,7 +2,11 @@ import numpy as np
 import numpy.random as r
 import math
 
-# A simple neural network that using the logistic function.
+# Returns a column vector
+def logistic(vector):
+    return np.array([[(1.0 / (1 + math.exp(-x))) for x in vector]]).T
+
+# A simple neural network that uses the logistic function.
 class NeuralNetwork:
 
     # Layers is an array where layers[i] contains the number
@@ -10,17 +14,18 @@ class NeuralNetwork:
     #
     # Rate is the learning rate for stochastic gradient descent.
     #
-    def __init__(self, layers, rate):
+    def __init__(self, layers, rate, fn=logistic):
 
         self.layers = layers
         self.weights = []
         self.rate = rate
+        self.fn = fn
 
         # Initialize weights
         for i in range(0, len(self.layers) - 1):
             self.weights.append(r.rand(self.layers[i + 1], self.layers[i]) - 0.5)
 
-    # Train using backpropagation and stochastic gradient descent
+    # Train using back-propagation and stochastic gradient descent
     def train(self, examples, targets, epochs):
 
         for epoch in range(epochs):
@@ -28,13 +33,17 @@ class NeuralNetwork:
             # Iterate through all training examples
             for i in range(len(examples)):
 
+
                 # Forward phase
                 out = [examples[i]]
 
                 for layer in range(len(self.layers) - 1):
-                    out.append(logistic(np.dot(self.weights[layer], out[-1])))
+                    out.append(self.fn(np.dot(self.weights[layer], out[-1])))
 
                 error = targets[i] - out[-1]
+
+                if (i % 100 == 0):
+                    print "Error is ", np.linalg.norm(error), " on iteration ", i, " for input ", np.argmax(targets[i])
 
                 # Backward phase
                 for i in range(len(self.layers) - 1, 0, -1):
@@ -49,16 +58,6 @@ class NeuralNetwork:
         values = input
 
         for layer in range(len(self.layers) - 1):
-            values = logistic(np.dot(self.weights[layer], values))
+            values = self.fn(np.dot(self.weights[layer], values))
 
         return values
-
-# Returns a column vector
-def logistic(vector):
-    return np.array([[(1.0 / (1 + math.exp(-x))) for x in vector]]).T
-
-# Testing
-if __name__ == "__main__":
-    r.seed(0)
-    network = NeuralNetwork([3, 2, 7, 100, 200], 0.1)
-    print network.query(np.array([3, 3, 3]))
